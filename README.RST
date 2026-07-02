@@ -12,8 +12,7 @@ It supports the following actions:
 
 System requirements
 ===================
-The script should work on systems where Python 3.7 can run. Theoretically, it can run on 3.6 but then the order of the
-CSF keys might not be preserved exactly.
+Python 3.7+ (theoretically, it can run on 3.6, but then the order of the CSF keys is not guaranteed)
 
 
 Where to download
