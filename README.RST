@@ -78,7 +78,7 @@ patch is specified, then patches will be merged in RAM before being applied to t
 This feature allows you to mod CSF files without caring about other strings - very useful for modding, issuing
 localisation fixes etc.
 
-CSF patch files are JSON files that use the following structure:
+CSF patch files are JSON files that use the structure very similar to this example:
 
 .. code-block:: json
 
