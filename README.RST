@@ -12,7 +12,8 @@ It supports the following actions:
 
 System requirements
 ===================
-The script should work on systems where Python 3. can run.
+The script should work on systems where Python 3.7 can run. Theoretically, it can run on 3.6 but then the order of the
+CSF keys might not be preserved exactly.
 
 
 Where to download
@@ -64,7 +65,7 @@ This example will compile a new CSF file ``nox.csf`` from the input file ``nox.c
 The data shape of the input must match exactly the format described in `CSF decompilation`_. String variations will be
 stored in the order of appearance in the JSON file.
 
-**If string variation has no sound use ``null`` value, not an empty string!**
+**If string variation has no sound use** ``null`` **value, not an empty string!**
 
 CSF patching
 ------------
