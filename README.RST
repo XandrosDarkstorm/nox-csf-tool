@@ -37,8 +37,8 @@ environment.
 
 1. Go to the "Releases" page and download one of these files:
 
-   - ``csftool-ppe-windows-x64.zip``, if you are running 64 bit Windows 7 or later.
-   - ``csftool-ppe-windows-x86.zip``, if you are running 32 bit Windows 7 - Windows 10.
+   - ``csftool-ppe-windows-64bit.zip``, if you are running 64 bit Windows 7 or later.
+   - ``csftool-ppe-windows-32bit.zip``, if you are running 32 bit Windows 7 - Windows 10.
 
 2. Unpack the zip file into an empty folder of your choice.
 3. Use ``csftool.cmd`` file in cmd.exe or PowerShell to run commands, instead of ``csftool.pyz``
