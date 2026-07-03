@@ -7,9 +7,12 @@ from csf import CSF
 from csfpatch import CSFPatch, CSFPatchException
 
 
+VERSION = "1.1.0"
+
+
 def get_cmdline_data() -> Tuple[bool, str, List[str]]:
     parser = argparse.ArgumentParser()
-    parser.add_argument("-V", "--version", action="version", version="%(prog)s 1.0.0")
+    parser.add_argument("-V", "--version", action="version", version=f"%(prog)s {VERSION}")
     parser.add_argument("-r", "--russian-lang", action="store_true",
                         help="Enables decoding of Russian localisation, which uses Windows-1251 encoding.")
     parser.add_argument("action", action="store", choices=["decompile", "compile", "patch", "lookup"],
@@ -27,7 +30,7 @@ def load_csf(path: str, quirk: bool) -> Optional[CSF]:
               f'{data.total_entries} entries].')
         return data
     except Exception as ex:
-        print(f'Failed to open CSF file "{path}" - {ex}')
+        print(f'Failed to open CSF file "{path}" - {repr(ex)}')
         return None
 
 
@@ -41,11 +44,15 @@ def act_compile(params: List[str], quirk: bool):
     try:
         data = CSF.from_json(sourcefile)
     except Exception as ex:
-        print(f'Failed to open CSF data file "{sourcefile}" - {ex}')
+        print(f'Failed to open CSF data file "{sourcefile}" - {repr(ex)}')
         return 1
     print(f'Compiling new csf file "{targetfile}"...')
-    data.save_csf(targetfile, quirk)
-    print("Done")
+    try:
+        data.save_csf(targetfile, quirk)
+        print("Done")
+    except Exception as ex:
+        print(f'Failed to write CSF file "{targetfile}" - {repr(ex)}. Aborting.')
+        return 1
     return 0
 
 
@@ -54,10 +61,15 @@ def act_decompile(params: List[str], quirk: bool):
         print("Russian language mode: reading strings in Windows-1251 encoding.")
     for file in params:
         try:
-            data = CSF.from_csf(file, quirk)
+            data = load_csf(file, quirk)
+            if data is None:
+                continue
+            print(f'Extracting to "{file + ".json"}"...')
             data.save_json(file + ".json")
+            print("Done")
         except Exception as ex:
-            print(f'Skipping file "{file}" - {ex}.')
+            print(f'Failed to write JSON data "{file}.json" - {repr(ex)}. Aborting.')
+            return 1
     return 0
 
 
@@ -90,7 +102,7 @@ def act_patch(params: List[str], quirk: bool) -> int:
         return 1
     final_patch: Optional[CSFPatch] = None
     print(f'Loading patches...')
-    for file in params:
+    for file in params[1:]:
         try:
             current_patch = CSFPatch.from_json(file)
             print(f'Loaded patch "{current_patch.description}" [{file}].')
@@ -103,14 +115,18 @@ def act_patch(params: List[str], quirk: bool) -> int:
         except UnicodeDecodeError:
             print(f"Skipping patch file '{file}' - Not a patch file.")
         except (json.JSONDecodeError, CSFPatchException) as ex:
-            print(f"Skipping patch file '{file}' - {ex}.")
+            print(f"Skipping patch file '{file}' - {repr(ex)}.")
     if final_patch is None or final_patch.is_empty():
         print(f'There are no changes to apply.')
     else:
         print(f'Applying resulting patch...')
         final_patch.apply(data)
-        data.save_csf(targetfile, quirk)
-        print(f'Done')
+        try:
+            data.save_csf(targetfile, quirk)
+            print("Done")
+        except Exception as ex:
+            print(f'Failed to write CSF file "{targetfile}" - {repr(ex)}')
+            return 1
     return 0
 
 

@@ -1,7 +1,7 @@
 ====================================================
 NOX.CSF reader for the game Nox by Westwood Studios.
 ====================================================
-This tool allows you to manipulate ``nox.csf`` file of the game.
+This tool allows you to manipulate the ``nox.csf`` file of the game.
 
 It supports the following actions:
 
@@ -15,12 +15,33 @@ System requirements
 Python 3.7+ (theoretically, it can run on 3.6, but then the order of the CSF keys is not guaranteed)
 
 
-Where to download
-=================
-You have 2 choices.
+Downloading and running the tool
+================================
+Examples in this guide use ``csftool`` as a stand-in for however you actually launch it. Depending on your setup, you
+need to substitute ``csftool`` with the method matching your setup.
 
-1. Download the pyz file from the "Releases" page (csftool) and run it with your Python interpreter.
-2. Download the repository/source code and run the ``__main__.py`` file with your Python interpreter.
+Linux/BSD (requires Python installation)
+----------------------------------------
+1. Go to the "Releases" page and download the file ``csftool.pyz`` to a desired location.
+2. Run it using ``python3 csftool.pyz``
+
+Windows (requires Python installation)
+--------------------------------------
+1. Go to the "Releases" page and download the file ``csftool.pyz`` to a desired location.
+2. Run it using ``py.exe csftool.pyz``
+
+Windows (Portable Python Environment)
+-------------------------------------
+If you don't have Python installed, you can use a portable variant which comes with the official Embedded Python
+environment.
+
+1. Go to the "Releases" page and download one of these files:
+
+   - ``csftool-ppe-windows-x64.zip``, if you are running 64 bit Windows 7 or later.
+   - ``csftool-ppe-windows-x86.zip``, if you are running 32 bit Windows 7 - Windows 10.
+
+2. Unpack the zip file into an empty folder of your choice.
+3. Use ``csftool.cmd`` file in cmd.exe or PowerShell to run commands, instead of ``csftool.pyz``
 
 How to use
 ==========
@@ -34,7 +55,7 @@ CSF decompilation
 -----------------
 .. code-block:: console
 
-   noxcsf [-r] decompile nox.csf[, ...]
+   csftool [-r] decompile nox.csf[, ...]
 
 This example will decompile your ``nox.csf`` into a JSON file named ``nox.csf.json``. If more than one file is given,
 all of them will be decompiled in the same way.
@@ -57,7 +78,7 @@ CSF compilation
 ---------------
 .. code-block:: console
 
-   noxcsf [-r] compile nox.csf modded_csf.json
+   csftool [-r] compile nox.csf modded_csf.json
 
 This example will compile a new CSF file ``nox.csf`` from the input file ``nox.csf.json``.
 
@@ -70,13 +91,13 @@ CSF patching
 ------------
 .. code-block:: console
 
-   noxcsf [-r] patch nox.csf csf_patch1.json[, ...]
+   csftool [-r] patch nox.csf csf_patch1.json[, ...]
 
 This example will patch CSF file ``nox.csf`` using rules described in the file ``csf_patch1.json``. If more than one
 patch is specified, then patches will be merged in RAM before being applied to the CSF file.
 
 This feature allows you to mod CSF files without caring about other strings - very useful for modding, issuing
-localisation fixes etc.
+localisation fixes, etc.
 
 CSF patch files are JSON files that use the structure very similar to this example:
 
@@ -125,7 +146,7 @@ String lookup
 -------------
 .. code-block:: console
 
-   noxcsf [-r] lookup nox.csf "player.c:tooheavy"[, ...]
+   csftool [-r] lookup nox.csf "player.c:tooheavy"[, ...]
 
 This example will look up a string ``player.c:tooheavy`` inside the ``nox.csf`` file. If more parameters are given,
 they will be looked up sequentially in addition to the first string.
@@ -134,13 +155,13 @@ Things to bear in mind:
 
 - Keys are case-insensitive.
 - Keys always consist of a category and a name, separated by a colon (:). On Windows systems, when using PowerShell you
-  must **wrap the string in double-quotes** so it doesn't confuse your string for key-value parameter pair.
+  must **wrap the string in double-quotes** so it doesn't confuse your string for a key-value parameter pair.
 - Values are returned in the form very similar to the one described in the `CSF decompilation`_ section. Below, you can
   see the example.
 
 .. code-block:: console
 
-   $ python3 noxcsf lookup examples/nox.csf player.c:tooheavy
+   csftool lookup examples/nox.csf player.c:tooheavy
    Loading CSF "examples/nox.csf"...
    Loaded CSF "examples/nox.csf" [English, 6304 strings in 5592 entries].
    player.c:tooheavy:
