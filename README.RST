@@ -1,5 +1,5 @@
 ====================================================
-NOX.CSF reader for the game Nox by Westwood Studios.
+NOX.CSF reader/editor for the game Nox by Westwood Studios.
 ====================================================
 This tool allows you to manipulate the ``nox.csf`` file of the game.
 
